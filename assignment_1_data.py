@@ -91,7 +91,7 @@ test_cases = [
 # generator.  Zero or negative numbers are interpreted as one of the
 # test cases listed above.  Any other values entered are ignored and
 # a random seed is used instead.
-pop_up_tester = False
+pop_up_tester = True
            
 #
 #--------------------------------------------------------------------#

@@ -125,12 +125,12 @@ else:
 # or raw_data because they're already called in the main program
 # below.
 def visualise_data(reports):
- # <--- Replace this statement with your solution
-    cell_size = 80 # pixels
-#1A WORK
+
+#1A WORK DRAWING THE SYMBOLS
     
     def draw_symbols():
-        
+        speed(0)
+        tracer(0)
         def draw_ingot():
 
                 forward(17.5)
@@ -230,7 +230,7 @@ def visualise_data(reports):
             setheading(0)
             penup()
             goto(x, y)
-            speed(0.5)
+            speed(0)
         
             #Draws a square Start
             forward(2)
@@ -267,7 +267,7 @@ def visualise_data(reports):
             setheading(0)
             penup()
             goto(x, y)
-            speed(0.5)
+            speed(0)
         
             #Draws a square Start
             forward(2)
@@ -306,7 +306,7 @@ def visualise_data(reports):
             setheading(0)
             penup()
             goto(x, y)
-            speed(0.5)
+            speed(0)
         
             #Draws a square Start
             forward(2)
@@ -347,7 +347,7 @@ def visualise_data(reports):
             steel_increasing(x = -660, y = 160)
             steel_decreasing(x = -660, y = -160)
         
-            pencolor("black")
+            pencolor("slate gray")
             goto(-660, 60)
             pendown()
             write("Symbol depicting the\nvalue of steel\nstocks staying at \n the same value", align = "left", font = ("Arial",8, "bold"))
@@ -371,121 +371,77 @@ def visualise_data(reports):
             penup()
 
         draw_symbols_left_description()
+        #1B WORK PROCESSING THE DATA
         
-        
+
+        # Dictionary mapping month names to cell coordinates
         month_to_cell = {
             'January': (-400, 0), 'February': (-320, 0), 'March': (-240, 0),
             'April': (-160, 0), 'May': (-80, 0), 'June': (0, 0),
             'July': (80, 0), 'August': (160, 0), 'September': (240, 0),
             'October': (320, 0), 'November': (400, 0), 'December': (480, 0)
-            }
-        
-            # Mapping of month names to their numerical order
-        # month_order = {
-        # 'January': 1, 'February': 2, 'March': 3, 'April': 4,
-        # 'May': 5, 'June': 6, 'July': 7, 'August': 8, 'September': 9,
-        # 'October': 10, 'November': 11, 'December': 12
-        #     }
-        
-        # reports.sort(key=lambda report: month_order[report[0]])
+        }
+
+        # Dictionary to store processed data
         processed_data = {}
-            
+
+        # Process the data set
         for report in reports:
             month, value = report
-                
+            
+            # Get coordinates based on the month
             coordinates = month_to_cell[month]
+            
+            # Store the processed data
             processed_data[month] = (value, coordinates)
             
-            # Process the data set
+        # Draw symbols based on the processed data
         for report in reports:
             month, value = report
-            x, y = month_to_cell[month] # Get coordinates based on the month
+            x, y = month_to_cell[month]  # Get coordinates based on the month
 
             # Decide which symbol to draw based on the value
             if value > 0:
-                steel_increasing(x,y) # Draw symbol for increase
-                steel_increasing(x, y + 80) # Draw symbol for increase
+                steel_increasing(x, y)  # Draw symbol for increase
+                steel_increasing(x, y + 80)  # Draw symbol for increase
                 if value > 1:
-                    steel_increasing(x, y+160)
+                    steel_increasing(x, y + 160)
                     if value > 2:
-                        steel_increasing(x, y+240)
+                        steel_increasing(x, y + 240)
             if value < 0:
-                steel_decreasing(x, y) # Draw symbol for decrease
-                steel_decreasing(x, y-80) # Draw symbol for decrease
+                steel_decreasing(x, y)  # Draw symbol for decrease
+                steel_decreasing(x, y - 80)  # Draw symbol for decrease
                 if value < -1:
-                    steel_decreasing(x, y-160)
+                    steel_decreasing(x, y - 160)
                     if value < -2:
-                        steel_decreasing(x, y-240)
+                        steel_decreasing(x, y - 240)
             if value == 0:
-                steel_balanced(x, y) # Draw symbol for balance
-                
+                steel_balanced(x, y)  # Draw symbol for balance
 
-        adjusted_profits = sum(min(max(value, -3), 3) for month, value in reports)
+        # Calculate adjusted profits
+        adjusted_profits = sum(value for month, value in reports)
 
-            
-
+        # Print total profits
         print(f"Total profits: {adjusted_profits}")
-        
-        goto(-660, -240)
-        pencolor("slate gray")
-        pendown()
-        write('Estimated Profits $: '+str(adjusted_profits) + " Billion", align = "left", font = ("Arial", 11, "bold"))
+
+        if adjusted_profits >= 0:
+            goto(-660, -240)
+            pencolor("slate gray")
+            pendown()
+            write(f"Estimated Profits $: {adjusted_profits} Billion", align="left", font=("Arial", 11, "bold"))
             
-        #     # Constants for drawing
-        # start_x = -400  # Starting X position for January
-        # cell_size = 80  # Size of each cell/grid
-        # y_limit = 240  # Maximum/Minimum Y position
-        
-        # # Initial positions and variables
-        # current_x = start_x
-        # current_y = 0  # Start at 0 for "January"
-
-        # # Sort reports by month order
-        # month_order = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
-        # reports.sort(key=lambda report: month_order.index(report[0]))
-        
-        # # Function definitions for drawing symbols (steel_balanced, steel_increasing, steel_decreasing) remain the same
-
-        # # Iterate over sorted reports and draw symbols at calculated positions
-        # for report in reports:
-        #     month, value = report
-            
-        #     # Decide the symbol based on the value
-        #     if value > 0:
-        #         steel_increasing(current_x, current_y)
-        #         # Update Y position, ensure it does not exceed y_limit
-        #         current_y = min(current_y + cell_size, y_limit)
-        #     elif value < 0:
-        #         steel_decreasing(current_x, current_y)
-        #         # Update Y position, ensure it does not go below -y_limit
-        #         current_y = max(current_y - cell_size, -y_limit)
-        #     else:  # value == 0
-        #         steel_balanced(current_x, current_y)
-            
-        #     # Move to the next position for the subsequent month
-        #     current_x += cell_size  # Move right by one cell for the next month
+        else:
+            goto(-660, -240)
+            pencolor("slate gray")
+            pendown()
+            write(f"Estimated Losses $: {adjusted_profits} Billion", align="left", font=("Arial", 11, "bold"))
 
 
-        
+        update()
+
     draw_symbols()
         
-        
-                
-
-        
-
-            
-            
-        
-            
-        
-            
     
-            
-
-
-
-        
 
     
 #--------------------------------------------------------------------#
